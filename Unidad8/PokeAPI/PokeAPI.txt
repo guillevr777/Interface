@@ -1,0 +1,41 @@
+src/
+	container/
+		DI.ts
+	data/
+		repositories/
+			PokemonRepository.ts
+			class PokemonRepository implements IPokemonRepository
+			+ getPokemonPorCantidad(int offset) : List<Pokemon>
+		database/
+			PokemonAPI.ts
+			class PokemonAPI
+			fetch Pokémon with QUERY
+	domain/
+		repositories/
+			IPokemonRepository.ts
+			interface IPokemonRepository
+			+ getPokemonPorCantidad(int offset) : List<Pokemon>
+		entities/
+			Pokémon.ts
+			class Pokémon
+			+ Id : Int
+			+ Nombre : String
+			Pokémon()
+			Pokémon(Id, Nombre)
+		interfaces/
+			IPokemonUseCase.ts
+			interface IPokemonUseCase
+			+ mostrarPokemonsPorCantidad(int offset) : List<Pokemon>
+		usecases/
+			PokemonUseCase.ts
+			class PokemonUseCase implements IPokemonUseCase
+			# Inyectamos el repositorio de Pokémon
+			+ mostrarPokemonsPorCantidad (int offset) : List<Pokemon>
+	UI/
+		PokemonController.ts
+		class PokemonController
+		# Inyectamos la interfaz del useCase
+		+ mostrarPokemonsPorCantidad (int offset) : List<Pokemon>
+	App/
+		PokeView.tsx
+		return view() -> mostrarPokemonsPorCantidad (int offset) : List<Pokemon>
