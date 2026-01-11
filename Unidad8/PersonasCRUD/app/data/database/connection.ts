@@ -3,7 +3,7 @@ export class Connection {
   private readonly baseURL: string;
 
   private constructor() {
-    this.baseURL = "https://ui20251201140912-echufmbcephkfyfc.francecentral-01.azurewebsites.net/api";
+    this.baseURL = "https://ui20251201140431-bsdaehbsavbmc6ge.italynorth-01.azurewebsites.net/api";
   }
 
   static getConnection(): Connection {

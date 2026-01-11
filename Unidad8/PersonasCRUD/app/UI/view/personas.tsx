@@ -2,11 +2,8 @@ import { Departamento } from '@/app/domain/entities/Departamento';
 import { Persona } from '@/app/domain/entities/Persona';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    Modal,
-    ScrollView,
+    ActivityIndicator, Alert,
+    FlatList, Modal, ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -16,7 +13,6 @@ import {
 import { CRUDDepartamentoVM } from '../viewmodel/DepartamentosVM';
 import { CRUDPersonaVM } from '../viewmodel/PersonasVM';
 
-
 export default function VistaCRUDPersonas() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
@@ -24,14 +20,12 @@ export default function VistaCRUDPersonas() {
   const [modalVisible, setModalVisible] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [personaActual, setPersonaActual] = useState(new Persona());
-  
+
   const personaVM = new CRUDPersonaVM();
   const departamentoVM = new CRUDDepartamentoVM();
-  
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-  
+
+  useEffect(() => { cargarDatos(); }, []);
+
   const cargarDatos = async () => {
     setLoading(true);
     try {
@@ -44,79 +38,63 @@ export default function VistaCRUDPersonas() {
     } catch (error) {
       Alert.alert('Error', 'No se pudieron cargar los datos');
       console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
-  
+
   const handleNuevo = () => {
     setPersonaActual(new Persona());
     setModoEdicion(false);
     setModalVisible(true);
   };
-  
+
   const handleEditar = (persona: Persona) => {
-    setPersonaActual({...persona});
+    setPersonaActual({ ...persona });
     setModoEdicion(true);
     setModalVisible(true);
   };
-  
+
   const handleEliminar = (persona: Persona) => {
     Alert.alert(
       'Confirmar eliminación',
-      `¿Está seguro de eliminar a ${persona.nombre} ${persona.apellidos}?`,
+      `¿Está seguro de eliminar a ${persona.Nombre} ${persona.Apellidos}?`,
       [
         { text: 'Cancelar', style: 'cancel' },
-        { 
-          text: 'Eliminar', 
-          style: 'destructive',
-          onPress: async () => {
-            const success = await personaVM.eliminar(persona.id);
-            if (success) {
-              Alert.alert('Éxito', 'Persona eliminada correctamente');
-              cargarDatos();
-            } else {
-              Alert.alert('Error', 'No se pudo eliminar la persona');
-            }
-          }
-        }
+        { text: 'Eliminar', style: 'destructive', onPress: async () => {
+          const success = await personaVM.eliminar(persona.ID);
+          if (success) { Alert.alert('Éxito', 'Persona eliminada'); cargarDatos(); }
+          else Alert.alert('Error', 'No se pudo eliminar la persona');
+        }}
       ]
     );
   };
-  
+
   const handleGuardar = async () => {
-    if (!personaActual.nombre || !personaActual.apellidos) {
+    if (!personaActual.Nombre || !personaActual.Apellidos) {
       Alert.alert('Error', 'Por favor complete nombre y apellidos');
       return;
     }
-
-    if (personaActual.idDepartamento === 0) {
+    if (personaActual.IDDepartamento === 0) {
       Alert.alert('Error', 'Por favor seleccione un departamento');
       return;
     }
-    
+
     try {
-      const success = modoEdicion 
+      const success = modoEdicion
         ? await personaVM.actualizar(personaActual)
         : await personaVM.crear(personaActual);
-      
-      if (success) {
-        Alert.alert('Éxito', `Persona ${modoEdicion ? 'actualizada' : 'creada'} correctamente`);
-        setModalVisible(false);
-        cargarDatos();
-      } else {
-        Alert.alert('Error', `No se pudo ${modoEdicion ? 'actualizar' : 'crear'} la persona`);
-      }
+      if (success) { Alert.alert('Éxito', `Persona ${modoEdicion ? 'actualizada' : 'creada'}`); setModalVisible(false); cargarDatos(); }
+      else Alert.alert('Error', `No se pudo ${modoEdicion ? 'actualizar' : 'crear'} la persona`);
     } catch (error) {
       Alert.alert('Error', 'Ocurrió un error inesperado');
+      console.error(error);
     }
   };
-  
-  const getNombreDepartamento = (idDepartamento: number): string => {
-    const dept = departamentos.find(d => d.id === idDepartamento);
+
+  const getNombreDepartamento = (id: number) => {
+    const dept = departamentos.find(d => d.id === id);
     return dept ? dept.nombre : 'Sin departamento';
   };
-  
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -125,52 +103,38 @@ export default function VistaCRUDPersonas() {
       </View>
     );
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Listado de Personas</Text>
-        <Text style={styles.headerSubtitle}>Total: {personas.length} persona(s)</Text>
+        <Text style={styles.headerSubtitle}>Total: {personas.length}</Text>
       </View>
 
-      <TouchableOpacity 
-        style={styles.addButton}
-        onPress={handleNuevo}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={handleNuevo}>
         <Text style={styles.addButtonText}>➕ Crear Nueva Persona</Text>
       </TouchableOpacity>
 
       {personas.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>📋 No hay personas registradas</Text>
-          <Text style={styles.emptySubtext}>Presiona "Crear Nueva Persona" para añadir una</Text>
         </View>
       ) : (
         <FlatList
           data={personas}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item.ID.toString()}
           renderItem={({ item }) => (
             <View style={styles.listItem}>
               <View style={styles.itemInfo}>
-                <Text style={styles.itemTitle}>
-                  👤 {item.nombre} {item.apellidos}
-                </Text>
-                <Text style={styles.itemSubtitle}>🎂 Edad: {item.edad} años</Text>
-                <Text style={styles.itemSubtitle}>
-                  🏢 {getNombreDepartamento(item.idDepartamento)}
-                </Text>
+                <Text style={styles.itemTitle}>👤 {item.Nombre} {item.Apellidos}</Text>
+                <Text style={styles.itemSubtitle}>🎂 {item.FechaNacimiento.split('T')[0]}</Text>
+                <Text style={styles.itemSubtitle}>🏢 {getNombreDepartamento(item.IDDepartamento)}</Text>
               </View>
               <View style={styles.itemActions}>
-                <TouchableOpacity 
-                  style={styles.editButton}
-                  onPress={() => handleEditar(item)}
-                >
+                <TouchableOpacity style={styles.editButton} onPress={() => handleEditar(item)}>
                   <Text style={styles.buttonText}>✏️ Modificar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.deleteButton}
-                  onPress={() => handleEliminar(item)}
-                >
+                <TouchableOpacity style={styles.deleteButton} onPress={() => handleEliminar(item)}>
                   <Text style={styles.buttonText}>🗑️ Eliminar</Text>
                 </TouchableOpacity>
               </View>
@@ -179,85 +143,46 @@ export default function VistaCRUDPersonas() {
           contentContainerStyle={{ paddingBottom: 20 }}
         />
       )}
-      
-      {/* Modal de Edición/Creación */}
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+
+      <Modal visible={modalVisible} animationType="slide">
         <ScrollView style={styles.modalContainer}>
           <View style={styles.modalHeader}>
-            <TouchableOpacity 
-              onPress={() => setModalVisible(false)}
-              style={styles.closeButtonContainer}
-            >
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={styles.modalCloseButton}>✕ Cancelar</Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>
-              {modoEdicion ? '✏️ Modificar Persona' : '➕ Crear Nueva Persona'}
-            </Text>
+            <Text style={styles.modalTitle}>{modoEdicion ? '✏️ Modificar Persona' : '➕ Crear Persona'}</Text>
           </View>
-          
+
           <View style={styles.form}>
             <Text style={styles.label}>Nombre *</Text>
-            <TextInput
-              style={styles.input}
-              value={personaActual.nombre}
-              onChangeText={(text) => setPersonaActual({...personaActual, nombre: text})}
-              placeholder="Ingrese el nombre"
-              placeholderTextColor="#999"
-            />
-            
+            <TextInput style={styles.input} value={personaActual.Nombre} onChangeText={text => setPersonaActual({...personaActual, Nombre: text})} placeholder="Nombre" />
+
             <Text style={styles.label}>Apellidos *</Text>
-            <TextInput
-              style={styles.input}
-              value={personaActual.apellidos}
-              onChangeText={(text) => setPersonaActual({...personaActual, apellidos: text})}
-              placeholder="Ingrese los apellidos"
-              placeholderTextColor="#999"
-            />
-            
-            <Text style={styles.label}>Edad</Text>
-            <TextInput
-              style={styles.input}
-              value={personaActual.edad === 0 ? '' : personaActual.edad.toString()}
-              onChangeText={(text) => setPersonaActual({...personaActual, edad: parseInt(text) || 0})}
-              placeholder="Ingrese la edad"
-              keyboardType="numeric"
-              placeholderTextColor="#999"
-            />
-            
+            <TextInput style={styles.input} value={personaActual.Apellidos} onChangeText={text => setPersonaActual({...personaActual, Apellidos: text})} placeholder="Apellidos" />
+
+            <Text style={styles.label}>Teléfono</Text>
+            <TextInput style={styles.input} value={personaActual.Telefono} onChangeText={text => setPersonaActual({...personaActual, Telefono: text})} placeholder="Teléfono" />
+
+            <Text style={styles.label}>Dirección</Text>
+            <TextInput style={styles.input} value={personaActual.Direccion} onChangeText={text => setPersonaActual({...personaActual, Direccion: text})} placeholder="Dirección" />
+
+            <Text style={styles.label}>Foto URL</Text>
+            <TextInput style={styles.input} value={personaActual.FotoURL} onChangeText={text => setPersonaActual({...personaActual, FotoURL: text})} placeholder="URL de la foto" />
+
+            <Text style={styles.label}>Fecha de nacimiento</Text>
+            <TextInput style={styles.input} value={personaActual.FechaNacimiento.split('T')[0]} onChangeText={text => setPersonaActual({...personaActual, FechaNacimiento: new Date(text).toISOString()})} placeholder="YYYY-MM-DD" />
+
             <Text style={styles.label}>Departamento *</Text>
-            {departamentos.length === 0 ? (
-              <Text style={styles.warningText}>⚠️ No hay departamentos disponibles</Text>
-            ) : (
-              <View style={styles.pickerContainer}>
-                {departamentos.map(dept => (
-                  <TouchableOpacity
-                    key={dept.id}
-                    style={[
-                      styles.pickerOption,
-                      personaActual.idDepartamento === dept.id && styles.pickerOptionSelected
-                    ]}
-                    onPress={() => setPersonaActual({...personaActual, idDepartamento: dept.id})}
-                  >
-                    <Text style={[
-                      styles.pickerOptionText,
-                      personaActual.idDepartamento === dept.id && styles.pickerOptionTextSelected
-                    ]}>
-                      {personaActual.idDepartamento === dept.id ? '✓ ' : ''}{dept.nombre}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-            
+            {departamentos.map(dept => (
+              <TouchableOpacity key={dept.id} style={[styles.pickerOption, personaActual.IDDepartamento === dept.id && styles.pickerOptionSelected]} onPress={() => setPersonaActual({...personaActual, IDDepartamento: dept.id})}>
+                <Text style={[styles.pickerOptionText, personaActual.IDDepartamento === dept.id && styles.pickerOptionTextSelected]}>
+                  {personaActual.IDDepartamento === dept.id ? '✓ ' : ''}{dept.nombre}
+                </Text>
+              </TouchableOpacity>
+            ))}
+
             <TouchableOpacity style={styles.saveButton} onPress={handleGuardar}>
-              <Text style={styles.saveButtonText}>
-                💾 {modoEdicion ? 'Guardar Cambios' : 'Crear Persona'}
-              </Text>
+              <Text style={styles.saveButtonText}>{modoEdicion ? '💾 Guardar cambios' : '💾 Crear Persona'}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -266,215 +191,37 @@ export default function VistaCRUDPersonas() {
   );
 }
 
+// Estilos similares a los anteriores...
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
-  },
-  headerContainer: {
-    backgroundColor: '#007AFF',
-    padding: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#E3F2FD',
-  },
-  addButton: {
-    backgroundColor: '#34C759',
-    padding: 16,
-    margin: 20,
-    marginBottom: 10,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  },
-  emptyText: {
-    fontSize: 20,
-    color: '#666',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
-  },
-  listItem: {
-    backgroundColor: '#fff',
-    padding: 16,
-    marginHorizontal: 20,
-    marginBottom: 12,
-    borderRadius: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  itemInfo: {
-    flex: 1,
-    marginRight: 10,
-  },
-  itemTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 6,
-  },
-  itemSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 3,
-  },
-  itemActions: {
-    flexDirection: 'column',
-    gap: 8,
-  },
-  editButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    minWidth: 100,
-  },
-  deleteButton: {
-    backgroundColor: '#FF3B30',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    minWidth: 100,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 13,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  modalHeader: {
-    backgroundColor: '#007AFF',
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  closeButtonContainer: {
-    marginBottom: 10,
-  },
-  modalCloseButton: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '600',
-  },
-  modalTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  form: {
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    padding: 14,
-    fontSize: 16,
-    backgroundColor: '#f9f9f9',
-    color: '#333',
-  },
-  warningText: {
-    color: '#FF9500',
-    fontSize: 14,
-    fontStyle: 'italic',
-    marginTop: 5,
-  },
-  pickerContainer: {
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  pickerOption: {
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-  },
-  pickerOptionSelected: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
-  pickerOptionText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  pickerOptionTextSelected: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-  saveButton: {
-    backgroundColor: '#34C759',
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 30,
-    marginBottom: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' },
+  loadingText: { marginTop: 10, fontSize: 16, color: '#666' },
+  headerContainer: { backgroundColor: '#007AFF', padding: 20, paddingTop: 60, paddingBottom: 20 },
+  headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#fff', marginBottom: 5 },
+  headerSubtitle: { fontSize: 16, color: '#E3F2FD' },
+  addButton: { backgroundColor: '#34C759', padding: 16, margin: 20, borderRadius: 12, alignItems: 'center' },
+  addButtonText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 },
+  emptyText: { fontSize: 20, color: '#666', marginBottom: 10, textAlign: 'center' },
+  listItem: { backgroundColor: '#fff', padding: 16, marginHorizontal: 20, marginBottom: 12, borderRadius: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  itemInfo: { flex: 1, marginRight: 10 },
+  itemTitle: { fontSize: 17, fontWeight: '600', color: '#333', marginBottom: 6 },
+  itemSubtitle: { fontSize: 14, color: '#666', marginBottom: 3 },
+  itemActions: { flexDirection: 'column', gap: 8 },
+  editButton: { backgroundColor: '#007AFF', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8, minWidth: 100 },
+  deleteButton: { backgroundColor: '#FF3B30', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8, minWidth: 100 },
+  buttonText: { color: '#fff', fontSize: 13, fontWeight: '600', textAlign: 'center' },
+  modalContainer: { flex: 1, backgroundColor: '#fff' },
+  modalHeader: { backgroundColor: '#007AFF', paddingTop: 50, paddingBottom: 20, paddingHorizontal: 20 },
+  modalCloseButton: { fontSize: 16, color: '#fff', fontWeight: '600', marginBottom: 10 },
+  modalTitle: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
+  form: { padding: 20 },
+  label: { fontSize: 16, fontWeight: '600', color: '#333', marginBottom: 8, marginTop: 16 },
+  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 10, padding: 14, fontSize: 16, backgroundColor: '#f9f9f9', color: '#333' },
+  pickerOption: { padding: 16, borderWidth: 1, borderColor: '#ddd', borderRadius: 10, marginBottom: 10, backgroundColor: '#fff' },
+  pickerOptionSelected: { backgroundColor: '#007AFF', borderColor: '#007AFF' },
+  pickerOptionText: { fontSize: 16, color: '#333' },
+  pickerOptionTextSelected: { color: '#fff', fontWeight: '600' },
+  saveButton: { backgroundColor: '#34C759', padding: 16, borderRadius: 12, marginTop: 30, alignItems: 'center' },
+  saveButtonText: { color: '#fff', fontSize: 18, fontWeight: '600' },
 });

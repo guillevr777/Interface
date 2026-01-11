@@ -1,21 +1,30 @@
 export class Persona {
-  id: number;
-  nombre: string;
-  apellidos: string;
-  edad: number;
-  idDepartamento: number;
+  ID: number;
+  Nombre: string;
+  Apellidos: string;
+  Telefono: string;
+  Direccion: string;
+  FotoURL: string;
+  FechaNacimiento: string;
+  IDDepartamento: number;
 
   constructor(
-    id: number = 0,
-    nombre: string = '',
-    apellidos: string = '',
-    edad: number = 0,
-    idDepartamento: number = 0
+    ID = 0,
+    Nombre = '',
+    Apellidos = '',
+    Telefono = '',
+    Direccion = '',
+    FotoURL = '',
+    FechaNacimiento = new Date().toISOString(),
+    IDDepartamento = 0
   ) {
-    this.id = id;
-    this.nombre = nombre;
-    this.apellidos = apellidos;
-    this.edad = edad;
-    this.idDepartamento = idDepartamento;
+    this.ID = ID;
+    this.Nombre = Nombre;
+    this.Apellidos = Apellidos;
+    this.Telefono = Telefono;
+    this.Direccion = Direccion;
+    this.FotoURL = FotoURL;
+    this.FechaNacimiento = FechaNacimiento;
+    this.IDDepartamento = IDDepartamento;
   }
 }

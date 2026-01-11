@@ -1,15 +1,19 @@
+import { PersonasRepository } from '../../data/repositories/PersonasRepository';
 import { Persona } from '../entities/Persona';
-import { IPersonaRepository } from '../repositories/IPersonaRepository';
 
-export class CRUDPersonasUseCase {
-  constructor(private repository: IPersonaRepository) {}
+export class CRUDPersonaUseCase {
+  private repository: PersonasRepository;
+
+  constructor(repository: PersonasRepository) {
+    this.repository = repository;
+  }
 
   async listarPersonas(): Promise<Persona[]> {
     return await this.repository.listar();
   }
 
-  async editarPersona(id: number): Promise<Persona | null> {
-    return await this.repository.editar(id);
+  async obtenerPersona(id: number): Promise<Persona | null> {
+    return await this.repository.obtener(id);
   }
 
   async insertarPersona(persona: Persona): Promise<boolean> {
