@@ -18,7 +18,6 @@ export class CRUDPersonaVM implements IViewModel<Persona> {
   }
 
   async crear(persona: Persona): Promise<boolean> {
-    // elimina ID antes de crear
     const { ID, ...data } = persona;
     return await this.useCase.insertarPersona(data as Persona);
   }

@@ -1,5 +1,5 @@
 export class Persona {
-  ID?: number; // ahora opcional al crear
+  ID?: number;
   Nombre: string;
   Apellidos: string;
   Telefono: string;

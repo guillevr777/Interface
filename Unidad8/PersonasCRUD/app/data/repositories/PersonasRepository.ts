@@ -98,15 +98,26 @@ export class PersonasRepository implements IPersonaRepository {
   }
 
   async eliminar(id: number): Promise<boolean> {
-    try {
-      const response = await fetch(`${this.baseURL}/Persona/${id}`, {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' }
-      });
-      return response.ok;
-    } catch (error) {
-      console.error('Error al eliminar persona', error);
-      return false;
-    }
+  try {
+    const url = `${this.baseURL}/Persona/${id}`;
+    console.log('🔍 Eliminando:', url);
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    console.log('📊 Status:', response.status);
+    console.log('✅ OK:', response.ok);
+    
+    const text = await response.text();
+    console.log('📄 Respuesta:', text);
+    
+    return response.ok || response.status === 204;
+    
+  } catch (error) {
+    console.error('❌ Error:', error);
+    return false;
   }
+}
 }
