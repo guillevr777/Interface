@@ -2,8 +2,11 @@ import { Departamento } from '@/app/domain/entities/Departamento';
 import { Persona } from '@/app/domain/entities/Persona';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator, Alert,
-    FlatList, Modal, ScrollView,
+    ActivityIndicator,
+    Alert,
+    FlatList,
+    Modal,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -60,8 +63,11 @@ export default function VistaCRUDPersonas() {
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: 'Eliminar', style: 'destructive', onPress: async () => {
-          const success = await personaVM.eliminar(persona.ID);
-          if (success) { Alert.alert('Éxito', 'Persona eliminada'); cargarDatos(); }
+          const success = await personaVM.eliminar(persona.ID!);
+          if (success) { 
+            Alert.alert('Éxito', 'Persona eliminada'); 
+            cargarDatos(); 
+          }
           else Alert.alert('Error', 'No se pudo eliminar la persona');
         }}
       ]
@@ -79,11 +85,22 @@ export default function VistaCRUDPersonas() {
     }
 
     try {
-      const success = modoEdicion
-        ? await personaVM.actualizar(personaActual)
-        : await personaVM.crear(personaActual);
-      if (success) { Alert.alert('Éxito', `Persona ${modoEdicion ? 'actualizada' : 'creada'}`); setModalVisible(false); cargarDatos(); }
-      else Alert.alert('Error', `No se pudo ${modoEdicion ? 'actualizar' : 'crear'} la persona`);
+      let success = false;
+      if (modoEdicion) {
+        success = await personaVM.actualizar(personaActual);
+      } else {
+        // eliminar ID antes de crear
+        const { ID, ...data } = personaActual;
+        success = await personaVM.crear(data as Persona);
+      }
+
+      if (success) {
+        Alert.alert('Éxito', `Persona ${modoEdicion ? 'actualizada' : 'creada'}`);
+        setModalVisible(false);
+        cargarDatos();
+      } else {
+        Alert.alert('Error', `No se pudo ${modoEdicion ? 'actualizar' : 'crear'} la persona`);
+      }
     } catch (error) {
       Alert.alert('Error', 'Ocurrió un error inesperado');
       console.error(error);
@@ -122,7 +139,7 @@ export default function VistaCRUDPersonas() {
       ) : (
         <FlatList
           data={personas}
-          keyExtractor={item => item.ID.toString()}
+          keyExtractor={item => item.ID!.toString()}
           renderItem={({ item }) => (
             <View style={styles.listItem}>
               <View style={styles.itemInfo}>
@@ -155,26 +172,60 @@ export default function VistaCRUDPersonas() {
 
           <View style={styles.form}>
             <Text style={styles.label}>Nombre *</Text>
-            <TextInput style={styles.input} value={personaActual.Nombre} onChangeText={text => setPersonaActual({...personaActual, Nombre: text})} placeholder="Nombre" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.Nombre}
+              onChangeText={text => setPersonaActual({ ...personaActual, Nombre: text })}
+              placeholder="Nombre"
+            />
 
             <Text style={styles.label}>Apellidos *</Text>
-            <TextInput style={styles.input} value={personaActual.Apellidos} onChangeText={text => setPersonaActual({...personaActual, Apellidos: text})} placeholder="Apellidos" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.Apellidos}
+              onChangeText={text => setPersonaActual({ ...personaActual, Apellidos: text })}
+              placeholder="Apellidos"
+            />
 
             <Text style={styles.label}>Teléfono</Text>
-            <TextInput style={styles.input} value={personaActual.Telefono} onChangeText={text => setPersonaActual({...personaActual, Telefono: text})} placeholder="Teléfono" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.Telefono}
+              onChangeText={text => setPersonaActual({ ...personaActual, Telefono: text })}
+              placeholder="Teléfono"
+            />
 
             <Text style={styles.label}>Dirección</Text>
-            <TextInput style={styles.input} value={personaActual.Direccion} onChangeText={text => setPersonaActual({...personaActual, Direccion: text})} placeholder="Dirección" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.Direccion}
+              onChangeText={text => setPersonaActual({ ...personaActual, Direccion: text })}
+              placeholder="Dirección"
+            />
 
             <Text style={styles.label}>Foto URL</Text>
-            <TextInput style={styles.input} value={personaActual.FotoURL} onChangeText={text => setPersonaActual({...personaActual, FotoURL: text})} placeholder="URL de la foto" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.FotoURL}
+              onChangeText={text => setPersonaActual({ ...personaActual, FotoURL: text })}
+              placeholder="URL de la foto"
+            />
 
             <Text style={styles.label}>Fecha de nacimiento</Text>
-            <TextInput style={styles.input} value={personaActual.FechaNacimiento.split('T')[0]} onChangeText={text => setPersonaActual({...personaActual, FechaNacimiento: new Date(text).toISOString()})} placeholder="YYYY-MM-DD" />
+            <TextInput
+              style={styles.input}
+              value={personaActual.FechaNacimiento.split('T')[0]}
+              onChangeText={text => setPersonaActual({ ...personaActual, FechaNacimiento: new Date(text).toISOString() })}
+              placeholder="YYYY-MM-DD"
+            />
 
             <Text style={styles.label}>Departamento *</Text>
             {departamentos.map(dept => (
-              <TouchableOpacity key={dept.id} style={[styles.pickerOption, personaActual.IDDepartamento === dept.id && styles.pickerOptionSelected]} onPress={() => setPersonaActual({...personaActual, IDDepartamento: dept.id})}>
+              <TouchableOpacity
+                key={dept.id}
+                style={[styles.pickerOption, personaActual.IDDepartamento === dept.id && styles.pickerOptionSelected]}
+                onPress={() => setPersonaActual({ ...personaActual, IDDepartamento: dept.id })}
+              >
                 <Text style={[styles.pickerOptionText, personaActual.IDDepartamento === dept.id && styles.pickerOptionTextSelected]}>
                   {personaActual.IDDepartamento === dept.id ? '✓ ' : ''}{dept.nombre}
                 </Text>
@@ -191,7 +242,6 @@ export default function VistaCRUDPersonas() {
   );
 }
 
-// Estilos similares a los anteriores...
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' },

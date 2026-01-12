@@ -1,5 +1,5 @@
 export class Persona {
-  ID: number;
+  ID?: number; // ahora opcional al crear
   Nombre: string;
   Apellidos: string;
   Telefono: string;
@@ -9,14 +9,14 @@ export class Persona {
   IDDepartamento: number;
 
   constructor(
-    ID = 0,
     Nombre = '',
     Apellidos = '',
     Telefono = '',
     Direccion = '',
     FotoURL = '',
     FechaNacimiento = new Date().toISOString(),
-    IDDepartamento = 0
+    IDDepartamento = 0,
+    ID?: number
   ) {
     this.ID = ID;
     this.Nombre = Nombre;

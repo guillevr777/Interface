@@ -8,9 +8,33 @@ export class PersonasRepository implements IPersonaRepository {
   constructor() {
     this.baseURL = Connection.getConnection().getBaseURL();
   }
-    editar(id: number): Promise<Persona | null> {
-        throw new Error('Method not implemented.');
+
+  // Cambiado a 'obtener' para cumplir la interfaz
+  async obtener(id: number): Promise<Persona | null> {
+    try {
+      const response = await fetch(`${this.baseURL}/Persona/${id}`, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.status === 404) return null;
+
+      const p = await response.json();
+      return new Persona(
+        p.nombre,
+        p.apellidos,
+        p.telefono,
+        p.direccion,
+        p.fotoURL,
+        p.fechaNacimiento,
+        p.idDepartamento,
+        p.id // ID opcional al final
+      );
+    } catch (error) {
+      console.error('Error al obtener persona', error);
+      return null;
     }
+  }
 
   async listar(): Promise<Persona[]> {
     try {
@@ -23,14 +47,14 @@ export class PersonasRepository implements IPersonaRepository {
 
       const data = await response.json();
       return data.map((p: any) => new Persona(
-        p.id,
         p.nombre,
         p.apellidos,
         p.telefono,
         p.direccion,
         p.fotoURL,
         p.fechaNacimiento,
-        p.idDepartamento
+        p.idDepartamento,
+        p.id
       ));
     } catch (error) {
       console.error('Error al listar personas', error);
@@ -38,39 +62,17 @@ export class PersonasRepository implements IPersonaRepository {
     }
   }
 
-  async obtener(id: number): Promise<Persona | null> {
-    try {
-      const response = await fetch(`${this.baseURL}/Persona/${id}`, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.status === 404) return null;
-
-      const p = await response.json();
-      return new Persona(
-        p.id,
-        p.nombre,
-        p.apellidos,
-        p.telefono,
-        p.direccion,
-        p.fotoURL,
-        p.fechaNacimiento,
-        p.idDepartamento
-      );
-    } catch (error) {
-      console.error('Error al obtener persona', error);
-      return null;
-    }
-  }
-
   async insertar(persona: Persona): Promise<boolean> {
     try {
+      // eliminar ID al crear
+      const { ID, ...data } = persona;
+
       const response = await fetch(`${this.baseURL}/Persona`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(persona)
+        body: JSON.stringify(data)
       });
+
       return response.status === 201 || response.ok;
     } catch (error) {
       console.error('Error al insertar persona', error);
@@ -80,11 +82,14 @@ export class PersonasRepository implements IPersonaRepository {
 
   async actualizar(persona: Persona): Promise<boolean> {
     try {
+      if (!persona.ID) return false;
+
       const response = await fetch(`${this.baseURL}/Persona/${persona.ID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(persona)
       });
+
       return response.ok;
     } catch (error) {
       console.error('Error al actualizar persona', error);

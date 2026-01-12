@@ -1,10 +1,10 @@
-import { PersonasRepository } from '../../data/repositories/PersonasRepository';
 import { Persona } from '../entities/Persona';
+import { IPersonaRepository } from '../repositories/IPersonaRepository';
 
 export class CRUDPersonaUseCase {
-  private repository: PersonasRepository;
+  private repository: IPersonaRepository;
 
-  constructor(repository: PersonasRepository) {
+  constructor(repository: IPersonaRepository) {
     this.repository = repository;
   }
 
