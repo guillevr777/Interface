@@ -1,0 +1,131 @@
+src/
+	container/
+		core.ts
+		types.ts
+	data/
+		database/
+
+			Connection.ts
+			class Connection
+			getConnection()
+
+		repositories/
+
+			DepartamentoRepository.ts
+			class DepartamentoRepository import IDepartamentoRepository
+			listar() : List<Departamento>
+			Editar(id : number) : Departamento depart
+			Insertar(id, nombre) : bool
+			Eliminar(id : number) : bool
+
+			PersonasRepository.ts
+			class PersonasRepository import IPersonasRepository
+			listar() : List<Persona>
+			Editar(id : number) : Persona pers
+			Insertar(id, nombre) : bool
+			Eliminar(id : number) : bool
+
+	domain/
+		entities/
+			
+			Persona.ts
+			class Persona
+			id : number
+			nombre : String
+			apellidos : String
+			idDepartamento : number
+			Persona()
+			Persona(id, nombre, apellidos, idDepartamento)
+
+			Departamento.ts
+			class Departamento
+			id : number
+			nombre : String
+			Departamento()
+			Departamento(id, nombre)
+
+		repositories/
+			
+			IDepartamentoRepository.ts
+			interface IDepartamentoRepository
+			listar() : List<Departamento>
+			Editar(id : number) : Departamento depart
+			Insertar(id, nombre) : bool
+			Eliminar(id : number) : bool
+
+			IPersonaRepository.ts
+			interface IPersonaRepository
+			listar() : List<Persona>
+			Editar(id : number) : Persona pers
+			Insertar(id, nombre) : bool
+			Eliminar(id : number) : bool
+
+		interfaces/
+			
+			IListarPersonasUseCase.ts
+			interface IListarPersonasUseCase
+			listarPersonas() : List<Persona>
+
+			IEditarPersonasUseCase.ts
+			interface IEditarPersonasUseCase
+			EditarPersona(id : number) : Persona pers
+
+			IInsertarPersonasUseCase.ts
+			interface IInsertarPersonasUseCase
+			InsertarPersona(id , nombre, apellidos, idDepartamento) : Bool
+
+			IListarDepartamentos.ts
+			interface IListarDepartamentos
+			listarDepartamentos() : List<Departamento>
+
+			IEditarDepartamentosUseCase.ts
+			interface IEditarDepartamentosUseCase
+			EditarDepartamento(idDepartamento : number) : Departamneto depart
+
+			IInsertarDepartamentosUseCase.ts
+			interface IInsertarDepartamentosUseCase
+			InsertarDepartamento(id , nombre) : Bool
+
+			IEliminarPersonaUseCase.ts
+			interface IEliminarPersonaUseCase
+			EliminarPersona(id : number) : bool
+
+			IEliminarDepartamentoUseCase.ts
+			interface IEliminarDepartamentoUseCase
+			EliminarDepartamento(id : number) : bool
+
+		usecases/
+
+			CRUDPersonasUseCase.ts
+			class CRUDPersonasUseCase import IListarPersonasUseCase, IEditarPersonasUseCase, IInsertarPersonasUseCase, IEliminarPersonaUseCase
+			# Inyeccion de IPersonasRepository
+			listarPersonas() -> listar() : List<Persona>
+			EditarPersona(id : number) -> Editar(id : number) : Persona pers
+			InsertarPersona(id , nombre, apellidos, idDepartamento) -> Insertar(id, nombre) : bool
+			EliminarPersona(id : number) -> Eliminar(id : number) : bool
+
+			CRUDDepartamentos.ts
+			class ListarDepartamentos import IListarDepartamentos, IEditarDepartamentosUseCase, IInsertarDepartamentosUseCase, IEliminarDepartamentoUseCase
+			# Inyeccion de IDepartamentoRepository
+			listarDepartamentos() : List<Departamento> -> listar() : List<Departamento>
+			EditarDepartamento(idDepartamento : number) : Departamneto depart -> Editar(id : number) : Persona pers
+			InsertarDepartamento(id , nombre) : Bool -> Insertar(id, nombre) : bool
+			EliminarDepartamento(id : number) : bool -> Eliminar(id : number) : bool
+
+		UI/
+			viewmodel/
+				
+				CRUDVM.ts
+				class CRUDVM
+				# Inyeccion de CRUDDepartamentosUseCase, CRUDPersonasUseCase				
+				
+			view/
+				vistaPrincipal.tsx
+				# Vista con seleccion entre Personas o Departamentos
+
+				vistaListado.tsx
+				# Listado donde se seleccionara una Persona o Departamento entre todos los de la lista y se eligira entre eliminarlo, 
+				modificarlo o crear uno nuevo. Al eliminarlo no habra mas que un boton pero para modificar y crear se redirecciona a otra vista
+
+				vistaEdicionInsercion.tsx
+				# Mostrara los datos para que modifiques el que quieras, o los campos para rellenar
