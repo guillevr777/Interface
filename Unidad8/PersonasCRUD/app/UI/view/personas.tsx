@@ -1,6 +1,6 @@
 import { Departamento } from '@/app/domain/entities/Departamento';
 import { Persona } from '@/app/domain/entities/Persona';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
