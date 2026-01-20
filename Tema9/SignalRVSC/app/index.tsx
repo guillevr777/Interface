@@ -1,3 +1,4 @@
+import 'abort-controller/polyfill';
 import React from 'react';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

@@ -8,6 +8,17 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactNative", policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .SetIsOriginAllowed((host) => true) // Permite cualquier origen (ideal para apps móviles)
+              .AllowCredentials();               // Obligatorio para SignalR
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
