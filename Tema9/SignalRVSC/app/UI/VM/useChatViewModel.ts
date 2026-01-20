@@ -1,32 +1,27 @@
-import { useState, useEffect } from 'react';
-import { clsMensajeUsuario } from '../Models/clsMensajeModelo';
-import { chatService } from '@/app/services/chatServices';
+import { clsMensajeUsuario } from "../../domain/entities/clsMensajeUsuario";
+import { IChatRepository } from "../../domain/repositories/IChatRepository";
 
-export const useChatViewModel = () => {
-  const [messages, setMessages] = useState<clsMensajeUsuario[]>([]);
-  const [currentUser, setCurrentUser] = useState('');
-  const [currentMessage, setCurrentMessage] = useState('');
+export class ChatViewModel {
+  private mensajes: clsMensajeUsuario[] = [];
+  private onUpdate?: (mensajes: clsMensajeUsuario[]) => void;
 
-  useEffect(() => {
-    chatService.startConnection((newMessage) => {
-      setMessages(prev => [...prev, newMessage]);
+  constructor(private chatRepository: IChatRepository) {}
+
+  async init() {
+    await this.chatRepository.connect();
+
+    this.chatRepository.onMessageReceived((mensaje) => {
+      this.mensajes = [...this.mensajes, mensaje];
+      this.onUpdate?.(this.mensajes);
     });
-  }, []);
+  }
 
-  const send = async () => {
-    if (currentUser && currentMessage) {
-      const msgObj = new clsMensajeUsuario(currentUser, currentMessage);
-      await chatService.sendMessage(msgObj);
-      setCurrentMessage('');
-    }
-  };
+send(mensaje: { Nombre: string; Mensaje: string }) {
+  return this.chatRepository.sendMessage(mensaje);
+}
 
-  return {
-    messages,
-    currentUser,
-    setCurrentUser,
-    currentMessage,
-    setCurrentMessage,
-    send
-  };
-};
+
+  subscribe(callback: (mensajes: clsMensajeUsuario[]) => void) {
+    this.onUpdate = callback;
+  }
+}

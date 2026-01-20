@@ -5,12 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-
-var app = builder.Build();
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactNative", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.AllowAnyHeader()
               .AllowAnyMethod()
@@ -18,6 +15,10 @@ builder.Services.AddCors(options =>
               .AllowCredentials();               // Obligatorio para SignalR
     });
 });
+
+var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

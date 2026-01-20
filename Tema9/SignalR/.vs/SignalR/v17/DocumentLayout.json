@@ -11,16 +11,16 @@
       "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +34,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "SignalR.csproj",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\SignalR.csproj",
               "RelativeDocumentMoniker": "SignalR\\SignalR.csproj",
@@ -42,11 +42,12 @@
               "RelativeToolTip": "SignalR\\SignalR.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-15T12:44:19.691Z"
+              "WhenOpened": "2026-01-15T12:44:19.691Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "chat.js",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\wwwroot\\js\\chat.js",
               "RelativeDocumentMoniker": "SignalR\\wwwroot\\js\\chat.js",
@@ -66,19 +67,21 @@
               "RelativeToolTip": "SignalR\\Pages\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-15T12:25:07.927Z"
+              "WhenOpened": "2026-01-15T12:25:07.927Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\Program.cs",
               "RelativeDocumentMoniker": "SignalR\\Program.cs",
               "ToolTip": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\Program.cs",
               "RelativeToolTip": "SignalR\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-15T12:24:27.116Z"
+              "WhenOpened": "2026-01-15T12:24:27.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
