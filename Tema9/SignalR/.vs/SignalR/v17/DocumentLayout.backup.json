@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\signalrchat\\hubs\\chathub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\signalrchat\\hubs\\chathub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|solutionrelative:signalr\\signalr.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{331BF459-86B9-4FA9-8B69-14A99472B3C9}|SignalR\\SignalR.csproj|c:\\users\\gs.villanueva\\documents\\interfaces\\tema9\\signalr\\signalr\\wwwroot\\js\\chat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -30,11 +30,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "SignalR.csproj",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\SignalR.csproj",
               "RelativeDocumentMoniker": "SignalR\\SignalR.csproj",
@@ -59,7 +59,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\Pages\\Index.cshtml",
               "RelativeDocumentMoniker": "SignalR\\Pages\\Index.cshtml",
@@ -72,7 +72,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\Program.cs",
               "RelativeDocumentMoniker": "SignalR\\Program.cs",
@@ -85,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "chatHub.cs",
               "DocumentMoniker": "C:\\Users\\gs.villanueva\\Documents\\Interfaces\\Tema9\\SignalR\\SignalR\\SignalRChat\\Hubs\\chatHub.cs",
               "RelativeDocumentMoniker": "SignalR\\SignalRChat\\Hubs\\chatHub.cs",

@@ -1,5 +1,5 @@
 import { clsMensajeUsuario } from "../../domain/entities/clsMensajeUsuario";
-import { IChatRepository } from "../../domain/repositories/IChatRepository";
+import { IChatRepository } from "../../UI/VM/IChatRepository";
 import { SignalRChatDataSource } from "../datasource/SignalRChatDataSource";
 
 export class ChatRepository implements IChatRepository {
