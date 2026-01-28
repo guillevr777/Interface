@@ -10,19 +10,16 @@ export default function ListadoPersonas() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Se ejecuta cada vez que la pantalla entra en foco
   useFocusEffect(
     useCallback(() => {
       let isMounted = true;
       setLoading(true);
-
       vm.listar().then((data) => {
         if (isMounted) {
           setPersonas(data);
           setLoading(false);
         }
       });
-
       return () => { isMounted = false; };
     }, [vm])
   );
@@ -37,10 +34,7 @@ export default function ListadoPersonas() {
 
   return (
     <View style={s.container}>
-      <TouchableOpacity
-        style={s.addBtn}
-        onPress={() => router.push('/UI/view/persona/editar')}
-      >
+      <TouchableOpacity style={s.addBtn} onPress={() => router.push('/UI/view/persona/editar')}>
         <Text style={s.addBtnText}>+ Nueva Persona</Text>
       </TouchableOpacity>
 
@@ -51,16 +45,17 @@ export default function ListadoPersonas() {
           <View style={s.item}>
             <View style={s.infoContainer}>
               <Text style={s.itemName}>{item.Nombre} {item.Apellidos}</Text>
+              
+              {/* CAMBIO: Mostrar nombre del departamento */}
+              <Text style={s.itemDepto}>🏢 {item.NombreDepartamento || 'Sin Departamento'}</Text>
+              
               <Text style={s.itemDetail}>📞 {item.Telefono || 'Sin tel.'}</Text>
               <Text style={s.itemDetail}>📍 {item.Direccion || 'Sin direc.'}</Text>
             </View>
             <View style={s.actions}>
               <TouchableOpacity 
                 style={s.editBtn}
-                onPress={() => router.push({
-                  pathname: '/UI/view/persona/editar',
-                  params: { id: item.ID }
-                })}
+                onPress={() => router.push({ pathname: '/UI/view/persona/editar', params: { id: item.ID } })}
               >
                 <Text style={s.btnText}>Editar</Text>
               </TouchableOpacity>
@@ -91,6 +86,8 @@ const s = StyleSheet.create({
   item: { backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 12, elevation: 2 },
   infoContainer: { marginBottom: 10 },
   itemName: { fontSize: 18, fontWeight: 'bold' },
+  // ESTILO CORREGIDO
+  itemDepto: { fontSize: 14, fontWeight: 'bold', color: '#007AFF', marginVertical: 2 },
   itemDetail: { fontSize: 14, color: '#666' },
   actions: { flexDirection: 'row', gap: 10 },
   editBtn: { backgroundColor: '#007AFF', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },

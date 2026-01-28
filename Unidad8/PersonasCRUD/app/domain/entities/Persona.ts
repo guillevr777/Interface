@@ -7,6 +7,7 @@ export class Persona {
   FotoURL: string;
   FechaNacimiento: string;
   IDDepartamento: number;
+  NombreDepartamento?: string; // Propiedad nueva
 
   constructor(
     Nombre = '',
@@ -16,7 +17,8 @@ export class Persona {
     FotoURL = '',
     FechaNacimiento = new Date().toISOString(),
     IDDepartamento = 0,
-    ID?: number
+    ID?: number,
+    NombreDepartamento?: string // Nuevo parámetro
   ) {
     this.ID = ID;
     this.Nombre = Nombre;
@@ -26,5 +28,6 @@ export class Persona {
     this.FotoURL = FotoURL;
     this.FechaNacimiento = FechaNacimiento;
     this.IDDepartamento = IDDepartamento;
+    this.NombreDepartamento = NombreDepartamento;
   }
 }

@@ -9,7 +9,6 @@ export class PersonasRepository implements IPersonaRepository {
     this.baseURL = Connection.getConnection().getBaseURL();
   }
 
-  // Cambiado a 'obtener' para cumplir la interfaz
   async obtener(id: number): Promise<Persona | null> {
     try {
       const response = await fetch(`${this.baseURL}/Persona/${id}`, {
@@ -28,7 +27,8 @@ export class PersonasRepository implements IPersonaRepository {
         p.fotoURL,
         p.fechaNacimiento,
         p.idDepartamento,
-        p.id // ID opcional al final
+        p.id,
+        p.nombreDepartamento // Mapeo del nuevo campo
       );
     } catch (error) {
       console.error('Error al obtener persona', error);
@@ -54,7 +54,8 @@ export class PersonasRepository implements IPersonaRepository {
         p.fotoURL,
         p.fechaNacimiento,
         p.idDepartamento,
-        p.id
+        p.id,
+        p.nombreDepartamento // Mapeo del nuevo campo
       ));
     } catch (error) {
       console.error('Error al listar personas', error);
@@ -64,18 +65,14 @@ export class PersonasRepository implements IPersonaRepository {
 
   async insertar(persona: Persona): Promise<boolean> {
     try {
-      // eliminar ID al crear
-      const { ID, ...data } = persona;
-
+      const { ID, NombreDepartamento, ...data } = persona; // Excluimos campos de lectura
       const response = await fetch(`${this.baseURL}/Persona`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
       });
-
-      return response.status === 201 || response.ok;
+      return response.ok;
     } catch (error) {
-      console.error('Error al insertar persona', error);
       return false;
     }
   }
@@ -83,41 +80,26 @@ export class PersonasRepository implements IPersonaRepository {
   async actualizar(persona: Persona): Promise<boolean> {
     try {
       if (!persona.ID) return false;
-
       const response = await fetch(`${this.baseURL}/Persona/${persona.ID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(persona)
       });
-
       return response.ok;
     } catch (error) {
-      console.error('Error al actualizar persona', error);
       return false;
     }
   }
 
   async eliminar(id: number): Promise<boolean> {
-  try {
-    const url = `${this.baseURL}/Persona/${id}`;
-    console.log('🔍 Eliminando:', url);
-    
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: { 'Accept': 'application/json' }
-    });
-    
-    console.log('📊 Status:', response.status);
-    console.log('✅ OK:', response.ok);
-    
-    const text = await response.text();
-    console.log('📄 Respuesta:', text);
-    
-    return response.ok || response.status === 204;
-    
-  } catch (error) {
-    console.error('❌ Error:', error);
-    return false;
+    try {
+      const response = await fetch(`${this.baseURL}/Persona/${id}`, {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+      return response.ok || response.status === 204;
+    } catch (error) {
+      return false;
+    }
   }
-}
 }
