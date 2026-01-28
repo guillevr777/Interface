@@ -1,7 +1,7 @@
 import { Departamento } from '@/app/domain/entities/Departamento';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CRUDDepartamentoVM } from '../../viewmodel/DepartamentosVM';
 
 export default function ListadoDepartamentos() {
@@ -58,11 +58,20 @@ export default function ListadoDepartamentos() {
               <TouchableOpacity 
                 style={[styles.smallBtn, styles.delColor]} 
                 onPress={async () => {
-                  // Eliminamos la alerta compleja y llamamos directo como en personas
-                  const ok = await vm.eliminar(item.id);
-                  if (ok) {
-                    const data = await vm.listar();
-                    setDepartamentos(data);
+                  try {
+                    const ok = await vm.eliminar(item.id);
+                    if (ok) {
+                      const data = await vm.listar();
+                      setDepartamentos(data);
+                    }
+                  } catch (error: any) {
+                    // Controlamos el error específico aquí
+                    if (error.message === 'El departamento tiene personas asociadas') {
+                      console.log('%c ATENCIÓN: No se pueden borrar departamentos con personas asociadas', 'color: orange; font-weight: bold;');
+                      Alert.alert("No se puede eliminar", error.message);
+                    } else {
+                      console.error("Error al intentar eliminar:", error.message);
+                    }
                   }
                 }}
               >

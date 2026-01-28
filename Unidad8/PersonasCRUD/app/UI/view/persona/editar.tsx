@@ -9,48 +9,75 @@ import { CRUDPersonaVM } from '../../viewmodel/PersonasVM';
 export default function EditarPersona() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  
+  // Instancia del ViewModel
   const [vm] = useState(() => new CRUDPersonaVM());
   
-  const [persona, setPersona] = useState<Persona>(new Persona('', '', '', '', '', new Date().toISOString(), 0));
+  // Objeto inicial para limpiar el formulario
+  const personaVacia = new Persona('', '', '', '', '', new Date().toISOString(), 0);
+
+  // Estados
+  const [persona, setPersona] = useState<Persona>(personaVacia);
   const [departamentos, setDepartamentos] = useState<IDepartamento[]>([]);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function inicializar() {
       setLoading(true);
-      // 1. Cargamos departamentos para el Picker
+      
+      // 1. Cargamos siempre los departamentos para el selector
       const listaDeptos = await vm.cargarDepartamentos();
-      setDepartamentos(listaDeptos);
+      if (isMounted) setDepartamentos(listaDeptos);
 
-      // 2. Si es edición, cargamos datos
+      // 2. Comprobamos si es Edición o Creación
       if (params.id) {
-        setModoEdicion(true);
         const p = await vm.obtener(Number(params.id));
-        if (p) setPersona(p);
+        if (isMounted && p) {
+          setPersona(p);
+          setModoEdicion(true);
+        }
+      } else {
+        // RESET: Si no hay ID, vaciamos el formulario y quitamos modo edición
+        setPersona(personaVacia);
+        setModoEdicion(false);
       }
-      setLoading(false);
+      
+      if (isMounted) setLoading(false);
     }
+
     inicializar();
-  }, [params.id]);
+    return () => { isMounted = false; };
+  }, [params.id]); // Se ejecuta cada vez que cambia el ID en la URL
 
   const handleGuardar = async () => {
-    if (!persona.Nombre || !persona.IDDepartamento) {
-      Alert.alert("Error", "El nombre y el departamento son obligatorios");
+    // Validación básica
+    if (!persona.Nombre?.trim() || persona.IDDepartamento === 0) {
+      Alert.alert("Validación", "Nombre y Departamento son obligatorios");
       return;
     }
-    
-    const success = modoEdicion ? await vm.actualizar(persona) : await vm.crear(persona);
-    
+
+    const success = modoEdicion 
+      ? await vm.actualizar(persona) 
+      : await vm.crear(persona);
+
     if (success) {
-      // REDIRECCIÓN AL INDEX DE PERSONAS
+      Alert.alert("Éxito", modoEdicion ? "Persona actualizada" : "Persona creada");
       router.replace('/UI/view/persona');
     } else {
-      Alert.alert("Error", "No se pudo guardar la persona. Revisa la conexión.");
+      Alert.alert("Error", vm.error || "No se pudo completar la operación");
     }
   };
 
-  if (loading) return <View style={s.centered}><ActivityIndicator size="large" color="#007AFF" /></View>;
+  if (loading) {
+    return (
+      <View style={s.centered}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={s.container} contentContainerStyle={{ paddingBottom: 40 }}>
@@ -58,27 +85,41 @@ export default function EditarPersona() {
       
       <View style={s.form}>
         <Text style={s.label}>Nombre</Text>
-        <TextInput style={s.input} value={persona.Nombre} onChangeText={t => setPersona({ ...persona, Nombre: t })} />
+        <TextInput 
+          style={s.input} 
+          value={persona.Nombre} 
+          onChangeText={t => setPersona({ ...persona, Nombre: t })} 
+          placeholder="Nombre"
+        />
 
         <Text style={s.label}>Apellidos</Text>
-        <TextInput style={s.input} value={persona.Apellidos} onChangeText={t => setPersona({ ...persona, Apellidos: t })} />
+        <TextInput 
+          style={s.input} 
+          value={persona.Apellidos} 
+          onChangeText={t => setPersona({ ...persona, Apellidos: t })} 
+          placeholder="Apellidos"
+        />
 
         <Text style={s.label}>Teléfono</Text>
-        <TextInput style={s.input} keyboardType="phone-pad" value={persona.Telefono} onChangeText={t => setPersona({ ...persona, Telefono: t })} />
+        <TextInput 
+          style={s.input} 
+          keyboardType="phone-pad" 
+          value={persona.Telefono} 
+          onChangeText={t => setPersona({ ...persona, Telefono: t })} 
+        />
 
-        <Text style={s.label}>Calle / Dirección</Text>
+        <Text style={s.label}>Dirección</Text>
         <TextInput 
           style={s.input} 
           value={persona.Direccion} 
           onChangeText={t => setPersona({ ...persona, Direccion: t })} 
-          placeholder="Introduce la dirección"
         />
 
         <Text style={s.label}>Departamento</Text>
         <View style={s.pickerWrapper}>
           <Picker
             selectedValue={persona.IDDepartamento}
-            onValueChange={(itemValue) => setPersona({ ...persona, IDDepartamento: itemValue })}
+            onValueChange={(val) => setPersona({ ...persona, IDDepartamento: val })}
           >
             <Picker.Item label="Seleccione un departamento..." value={0} />
             {departamentos.map((depto) => (
@@ -87,8 +128,20 @@ export default function EditarPersona() {
           </Picker>
         </View>
 
-        <TouchableOpacity style={s.saveBtn} onPress={handleGuardar}>
-          <Text style={s.saveBtnText}>{modoEdicion ? 'Guardar Cambios' : 'Registrar Persona'}</Text>
+        <TouchableOpacity 
+          style={[s.saveBtn, { backgroundColor: modoEdicion ? '#007AFF' : '#34C759' }]} 
+          onPress={handleGuardar}
+        >
+          <Text style={s.saveBtnText}>
+            {modoEdicion ? 'Guardar Cambios' : 'Registrar Persona'}
+          </Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={s.cancelBtn} 
+          onPress={() => router.back()}
+        >
+          <Text style={s.cancelBtnText}>Cancelar</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -103,6 +156,8 @@ const s = StyleSheet.create({
   label: { fontSize: 14, fontWeight: '700', color: '#444', marginBottom: 5 },
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginBottom: 15, backgroundColor: '#fafafa' },
   pickerWrapper: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 20, backgroundColor: '#fafafa', overflow: 'hidden' },
-  saveBtn: { backgroundColor: '#34C759', padding: 16, borderRadius: 10, alignItems: 'center', marginTop: 10 },
+  saveBtn: { padding: 16, borderRadius: 10, alignItems: 'center', marginTop: 10 },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  cancelBtn: { marginTop: 15, alignItems: 'center' },
+  cancelBtnText: { color: '#666', fontSize: 14 }
 });

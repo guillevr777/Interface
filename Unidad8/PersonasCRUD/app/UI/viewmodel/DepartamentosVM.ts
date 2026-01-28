@@ -50,11 +50,17 @@ export class CRUDDepartamentoVM implements IViewModel<Departamento> {
   async eliminar(id: number): Promise<boolean> {
     try {
       if (id <= 0) throw new Error('ID inválido');
+      
+      // Verificación de integridad referencial manual
       const tienePersonas = await this.verificarPersonasAsociadas(id);
-      if (tienePersonas) throw new Error('El departamento tiene personas asociadas');
+      if (tienePersonas) {
+        // Lanzamos el error específico que la vista capturará
+        throw new Error('El departamento tiene personas asociadas');
+      }
+      
       return await this.useCase.eliminarDepartamento(id);
     } catch (error) {
-      console.error('Error en CRUDDepartamentoVM.eliminar:', error);
+      // Re-lanzamos el error para que la UI lo maneje
       throw error;
     }
   }
@@ -68,8 +74,8 @@ export class CRUDDepartamentoVM implements IViewModel<Departamento> {
 
   private async verificarPersonasAsociadas(idDepartamento: number): Promise<boolean> {
     try {
-      const personaVM = Container.getInstance().getCRUDPersonasUseCase();
-      const personas = await personaVM.listarPersonas();
+      const personaUseCase = Container.getInstance().getCRUDPersonasUseCase();
+      const personas = await personaUseCase.listarPersonas();
       return personas.some(p => p.IDDepartamento === idDepartamento);
     } catch (error) {
       console.error('Error al verificar personas asociadas:', error);
