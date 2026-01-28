@@ -1,56 +1,68 @@
 import { Departamento } from '@/app/domain/entities/Departamento';
-import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CRUDDepartamentoVM } from '../../viewmodel/DepartamentosVM';
 
 export default function ListadoDepartamentos() {
   const router = useRouter();
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [vm] = useState(() => new CRUDDepartamentoVM());
+  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const cargar = async () => setDepartamentos(await vm.listar());
+  useFocusEffect(
+    useCallback(() => {
+      let isMounted = true;
+      const cargar = async () => {
+        try {
+          setLoading(true);
+          const data = await vm.listar();
+          if (isMounted) setDepartamentos(data);
+        } catch (e) {
+          console.error(e);
+        } finally {
+          if (isMounted) setLoading(false);
+        }
+      };
+      cargar();
+      return () => { isMounted = false; };
+    }, [vm])
+  );
 
-  useEffect(() => { cargar(); }, []);
+  if (loading) return <View style={styles.centered}><ActivityIndicator size="large" color="#FF9500" /></View>;
 
   return (
-    <View style={s.container}>
-      <Text style={s.title}>Listado de Departamentos</Text>
-      <TouchableOpacity 
-        style={s.addBtn} 
-        onPress={() => router.push('../departamento/editar')}
-      >
-        <Text style={s.addBtnText}>+ Nuevo Departamento</Text>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.addBtn} onPress={() => router.push('/UI/view/departamento/editar')}>
+        <Text style={styles.btnTextWhite}>+ Nuevo Departamento</Text>
       </TouchableOpacity>
 
       <FlatList
         data={departamentos}
-        keyExtractor={d => d.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={s.item}>
-            <Text style={s.itemTitle}>{item.nombre}</Text>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style={styles.card}>
+            <View>
+              <Text style={styles.cardTitle}>{item.nombre}</Text>
+              <Text style={styles.cardSub}>ID: {item.id}</Text>
+            </View>
+            <View style={styles.row}>
               <TouchableOpacity 
-                onPress={() => router.push({ 
-                  pathname: '../departamento/editar', 
-                  params: { id: item.id } 
-                })} 
-                style={s.editBtn}
+                style={[styles.actionBtn, styles.editColor]} 
+                onPress={() => router.push({ pathname: '/UI/view/departamento/editar', params: { id: item.id } })}
               >
-                <Text style={s.btnText}>Editar</Text>
+                <Text style={styles.btnTextWhite}>Editar</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                onPress={async () => { 
+                style={[styles.actionBtn, styles.delColor]} 
+                onPress={async () => {
                   try {
-                    await vm.eliminar(item.id); 
-                    cargar();
-                  } catch (error: any) {
-                    alert(error.message);
-                  }
-                }} 
-                style={s.delBtn}
+                    await vm.eliminar(item.id);
+                    setDepartamentos(await vm.listar());
+                  } catch (e: any) { Alert.alert("Error", e.message); }
+                }}
               >
-                <Text style={s.btnText}>Eliminar</Text>
+                <Text style={styles.btnTextWhite}>Eliminar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -60,14 +72,16 @@ export default function ListadoDepartamentos() {
   );
 }
 
-const s = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f5f5f5' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  addBtn: { backgroundColor: '#34C759', padding: 14, borderRadius: 10, marginBottom: 20, alignItems: 'center' },
-  addBtnText: { color: '#fff', fontWeight: '600' },
-  item: { backgroundColor: '#fff', padding: 16, borderRadius: 10, marginBottom: 12 },
-  itemTitle: { fontSize: 16, fontWeight: '600', marginBottom: 8 },
-  editBtn: { backgroundColor: '#007AFF', padding: 8, borderRadius: 8, flex: 1, alignItems: 'center' },
-  delBtn: { backgroundColor: '#FF3B30', padding: 8, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: '600' },
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  addBtn: { backgroundColor: '#FF9500', padding: 15, borderRadius: 12, marginBottom: 20, alignItems: 'center' },
+  card: { backgroundColor: '#fff', padding: 15, borderRadius: 12, marginBottom: 15, elevation: 3 },
+  cardTitle: { fontSize: 18, fontWeight: 'bold' },
+  cardSub: { fontSize: 12, color: '#888' },
+  row: { flexDirection: 'row', gap: 10, marginTop: 15 },
+  actionBtn: { flex: 1, padding: 10, borderRadius: 8, alignItems: 'center' },
+  editColor: { backgroundColor: '#007AFF' },
+  delColor: { backgroundColor: '#FF3B30' },
+  btnTextWhite: { color: '#fff', fontWeight: 'bold' }
 });
