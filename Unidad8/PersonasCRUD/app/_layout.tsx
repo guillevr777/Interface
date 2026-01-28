@@ -6,7 +6,6 @@ export default function Layout() {
     <Drawer>
       <Drawer.Screen name="index" options={{ title: 'Inicio' }} />
       
-      {/* EXPO ROUTER busca el archivo en app/UI/view/persona/index.tsx */}
       <Drawer.Screen 
         name="UI/view/persona/index" 
         options={{ title: 'Personas' }} 
@@ -17,7 +16,17 @@ export default function Layout() {
         options={{ title: 'Departamentos' }} 
       />
 
-      {/* Para las de editar que están en la misma carpeta */}
+      {/* --- ESTO OCULTA LO QUE NO QUIERES QUE SALGA --- */}
+      <Drawer.Screen 
+        name="container/core" 
+        options={{ drawerItemStyle: { display: 'none' } }} 
+      />
+      <Drawer.Screen 
+        name="data/database/connection" 
+        options={{ drawerItemStyle: { display: 'none' } }} 
+      />
+
+      {/* Ocultar también las pantallas de editar para que no ensucien el menú */}
       <Drawer.Screen 
         name="UI/view/persona/editar" 
         options={{ drawerItemStyle: { display: 'none' } }} 

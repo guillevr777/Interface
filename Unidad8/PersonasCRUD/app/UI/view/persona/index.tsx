@@ -45,22 +45,21 @@ export default function ListadoPersonas() {
           <View style={s.item}>
             <View style={s.infoContainer}>
               <Text style={s.itemName}>{item.Nombre} {item.Apellidos}</Text>
-              
-              {/* CAMBIO: Mostrar nombre del departamento */}
               <Text style={s.itemDepto}>🏢 {item.NombreDepartamento || 'Sin Departamento'}</Text>
-              
               <Text style={s.itemDetail}>📞 {item.Telefono || 'Sin tel.'}</Text>
               <Text style={s.itemDetail}>📍 {item.Direccion || 'Sin direc.'}</Text>
             </View>
+
+            {/* BOTONES PEQUEÑOS ALINEADOS A LA DERECHA */}
             <View style={s.actions}>
               <TouchableOpacity 
-                style={s.editBtn}
+                style={[s.smallBtn, s.editBtn]}
                 onPress={() => router.push({ pathname: '/UI/view/persona/editar', params: { id: item.ID } })}
               >
                 <Text style={s.btnText}>Editar</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={s.delBtn}
+                style={[s.smallBtn, s.delBtn]}
                 onPress={async () => {
                   if (await vm.eliminar(item.ID!)) {
                     const data = await vm.listar();
@@ -68,7 +67,7 @@ export default function ListadoPersonas() {
                   }
                 }}
               >
-                <Text style={s.btnText}>Eliminar</Text>
+                <Text style={s.btnText}>Borrar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -83,14 +82,33 @@ const s = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   addBtn: { backgroundColor: '#34C759', padding: 15, borderRadius: 10, marginBottom: 20, alignItems: 'center' },
   addBtnText: { color: '#fff', fontWeight: 'bold' },
-  item: { backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 12, elevation: 2 },
-  infoContainer: { marginBottom: 10 },
+  
+  // Tarjeta ajustada para botones a la derecha
+  item: { 
+    backgroundColor: '#fff', 
+    padding: 15, 
+    borderRadius: 10, 
+    marginBottom: 12, 
+    elevation: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  infoContainer: { flex: 1, marginRight: 10 },
   itemName: { fontSize: 18, fontWeight: 'bold' },
-  // ESTILO CORREGIDO
   itemDepto: { fontSize: 14, fontWeight: 'bold', color: '#007AFF', marginVertical: 2 },
   itemDetail: { fontSize: 14, color: '#666' },
-  actions: { flexDirection: 'row', gap: 10 },
-  editBtn: { backgroundColor: '#007AFF', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  delBtn: { backgroundColor: '#FF3B30', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: '600' },
+
+  // Estilos de botones pequeños
+  actions: { flexDirection: 'row', gap: 6 },
+  smallBtn: { 
+    paddingVertical: 6, 
+    paddingHorizontal: 10, 
+    borderRadius: 6, 
+    minWidth: 60, 
+    alignItems: 'center' 
+  },
+  editBtn: { backgroundColor: '#007AFF' },
+  delBtn: { backgroundColor: '#FF3B30' },
+  btnText: { color: '#fff', fontWeight: '600', fontSize: 12 },
 });

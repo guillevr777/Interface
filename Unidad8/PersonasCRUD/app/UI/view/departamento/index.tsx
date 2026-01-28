@@ -1,7 +1,7 @@
 import { Departamento } from '@/app/domain/entities/Departamento';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CRUDDepartamentoVM } from '../../viewmodel/DepartamentosVM';
 
 export default function ListadoDepartamentos() {
@@ -34,7 +34,7 @@ export default function ListadoDepartamentos() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addBtn} onPress={() => router.push('/UI/view/departamento/editar')}>
-        <Text style={styles.btnTextWhite}>+ Nuevo Departamento</Text>
+        <Text style={styles.addBtnText}>+ Nuevo Departamento</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -42,27 +42,31 @@ export default function ListadoDepartamentos() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <View>
+            <View style={styles.info}>
               <Text style={styles.cardTitle}>{item.nombre}</Text>
               <Text style={styles.cardSub}>ID: {item.id}</Text>
             </View>
-            <View style={styles.row}>
+            
+            <View style={styles.actions}>
               <TouchableOpacity 
-                style={[styles.actionBtn, styles.editColor]} 
+                style={[styles.smallBtn, styles.editColor]} 
                 onPress={() => router.push({ pathname: '/UI/view/departamento/editar', params: { id: item.id } })}
               >
-                <Text style={styles.btnTextWhite}>Editar</Text>
+                <Text style={styles.smallBtnText}>Editar</Text>
               </TouchableOpacity>
+              
               <TouchableOpacity 
-                style={[styles.actionBtn, styles.delColor]} 
+                style={[styles.smallBtn, styles.delColor]} 
                 onPress={async () => {
-                  try {
-                    await vm.eliminar(item.id);
-                    setDepartamentos(await vm.listar());
-                  } catch (e: any) { Alert.alert("Error", e.message); }
+                  // Eliminamos la alerta compleja y llamamos directo como en personas
+                  const ok = await vm.eliminar(item.id);
+                  if (ok) {
+                    const data = await vm.listar();
+                    setDepartamentos(data);
+                  }
                 }}
               >
-                <Text style={styles.btnTextWhite}>Eliminar</Text>
+                <Text style={styles.smallBtnText}>Borrar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -73,15 +77,32 @@ export default function ListadoDepartamentos() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
+  container: { flex: 1, padding: 15, backgroundColor: '#f8f9fa' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  addBtn: { backgroundColor: '#FF9500', padding: 15, borderRadius: 12, marginBottom: 20, alignItems: 'center' },
-  card: { backgroundColor: '#fff', padding: 15, borderRadius: 12, marginBottom: 15, elevation: 3 },
-  cardTitle: { fontSize: 18, fontWeight: 'bold' },
-  cardSub: { fontSize: 12, color: '#888' },
-  row: { flexDirection: 'row', gap: 10, marginTop: 15 },
-  actionBtn: { flex: 1, padding: 10, borderRadius: 8, alignItems: 'center' },
+  addBtn: { backgroundColor: '#FF9500', padding: 12, borderRadius: 10, marginBottom: 15, alignItems: 'center' },
+  addBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  card: { 
+    backgroundColor: '#fff', 
+    padding: 12, 
+    borderRadius: 10, 
+    marginBottom: 10, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center',
+    elevation: 2
+  },
+  info: { flex: 1 },
+  cardTitle: { fontSize: 16, fontWeight: '700' },
+  cardSub: { fontSize: 11, color: '#999' },
+  actions: { flexDirection: 'row', gap: 6 },
+  smallBtn: { 
+    paddingVertical: 6, 
+    paddingHorizontal: 10, 
+    borderRadius: 6, 
+    minWidth: 60, 
+    alignItems: 'center' 
+  },
+  smallBtnText: { color: '#fff', fontSize: 12, fontWeight: '600' },
   editColor: { backgroundColor: '#007AFF' },
   delColor: { backgroundColor: '#FF3B30' },
-  btnTextWhite: { color: '#fff', fontWeight: 'bold' }
 });

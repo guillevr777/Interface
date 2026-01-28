@@ -19,11 +19,11 @@ export default function EditarPersona() {
   useEffect(() => {
     async function inicializar() {
       setLoading(true);
-      // 1. Cargamos departamentos para que el Picker tenga opciones
+      // 1. Cargamos departamentos para el Picker
       const listaDeptos = await vm.cargarDepartamentos();
       setDepartamentos(listaDeptos);
 
-      // 2. Si es edición, cargamos los datos actuales
+      // 2. Si es edición, cargamos datos
       if (params.id) {
         setModoEdicion(true);
         const p = await vm.obtener(Number(params.id));
@@ -35,17 +35,18 @@ export default function EditarPersona() {
   }, [params.id]);
 
   const handleGuardar = async () => {
-    // Verificación simple antes de enviar
     if (!persona.Nombre || !persona.IDDepartamento) {
       Alert.alert("Error", "El nombre y el departamento son obligatorios");
       return;
     }
     
     const success = modoEdicion ? await vm.actualizar(persona) : await vm.crear(persona);
+    
     if (success) {
-      router.back();
+      // REDIRECCIÓN AL INDEX DE PERSONAS
+      router.replace('/UI/view/persona');
     } else {
-      Alert.alert("Error 400", "Revisa la consola para ver el error del servidor");
+      Alert.alert("Error", "No se pudo guardar la persona. Revisa la conexión.");
     }
   };
 
