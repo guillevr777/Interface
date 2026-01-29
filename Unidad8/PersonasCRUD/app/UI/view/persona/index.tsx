@@ -1,7 +1,7 @@
 import { Persona } from '@/app/domain/entities/Persona';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CRUDPersonaVM } from '../../viewmodel/PersonasVM';
 
 export default function ListadoPersonas() {
@@ -10,19 +10,19 @@ export default function ListadoPersonas() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useFocusEffect(
-    useCallback(() => {
-      let isMounted = true;
-      setLoading(true);
-      vm.listar().then((data) => {
-        if (isMounted) {
-          setPersonas(data);
-          setLoading(false);
-        }
-      });
-      return () => { isMounted = false; };
-    }, [vm])
-  );
+  const cargarDatos = useCallback(() => {
+    let isMounted = true;
+    setLoading(true);
+    vm.listar().then((data) => {
+      if (isMounted) {
+        setPersonas(data);
+        setLoading(false);
+      }
+    });
+    return () => { isMounted = false; };
+  }, [vm]);
+
+  useFocusEffect(cargarDatos);
 
   if (loading) {
     return (
@@ -46,11 +46,12 @@ export default function ListadoPersonas() {
             <View style={s.infoContainer}>
               <Text style={s.itemName}>{item.Nombre} {item.Apellidos}</Text>
               <Text style={s.itemDepto}>🏢 {item.NombreDepartamento || 'Sin Departamento'}</Text>
+              {/* NUEVA PROPIEDAD: EDAD */}
+              <Text style={s.itemAge}>🎂 Edad: {vm.obtenerEdad(item.FechaNacimiento)} años</Text>
               <Text style={s.itemDetail}>📞 {item.Telefono || 'Sin tel.'}</Text>
               <Text style={s.itemDetail}>📍 {item.Direccion || 'Sin direc.'}</Text>
             </View>
 
-            {/* BOTONES PEQUEÑOS ALINEADOS A LA DERECHA */}
             <View style={s.actions}>
               <TouchableOpacity 
                 style={[s.smallBtn, s.editBtn]}
@@ -61,9 +62,11 @@ export default function ListadoPersonas() {
               <TouchableOpacity 
                 style={[s.smallBtn, s.delBtn]}
                 onPress={async () => {
-                  if (await vm.eliminar(item.ID!)) {
-                    const data = await vm.listar();
-                    setPersonas(data);
+                  const success = await vm.eliminar(item.ID!);
+                  if (success) {
+                    cargarDatos();
+                  } else {
+                    Alert.alert("Error", vm.error || "No se pudo eliminar");
                   }
                 }}
               >
@@ -82,8 +85,6 @@ const s = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   addBtn: { backgroundColor: '#34C759', padding: 15, borderRadius: 10, marginBottom: 20, alignItems: 'center' },
   addBtnText: { color: '#fff', fontWeight: 'bold' },
-  
-  // Tarjeta ajustada para botones a la derecha
   item: { 
     backgroundColor: '#fff', 
     padding: 15, 
@@ -97,17 +98,10 @@ const s = StyleSheet.create({
   infoContainer: { flex: 1, marginRight: 10 },
   itemName: { fontSize: 18, fontWeight: 'bold' },
   itemDepto: { fontSize: 14, fontWeight: 'bold', color: '#007AFF', marginVertical: 2 },
-  itemDetail: { fontSize: 14, color: '#666' },
-
-  // Estilos de botones pequeños
+  itemAge: { fontSize: 14, color: '#333', fontWeight: '500', marginBottom: 2 }, // Estilo para edad
+  itemDetail: { fontSize: 13, color: '#666' },
   actions: { flexDirection: 'row', gap: 6 },
-  smallBtn: { 
-    paddingVertical: 6, 
-    paddingHorizontal: 10, 
-    borderRadius: 6, 
-    minWidth: 60, 
-    alignItems: 'center' 
-  },
+  smallBtn: { paddingVertical: 6, paddingHorizontal: 10, borderRadius: 6, minWidth: 60, alignItems: 'center' },
   editBtn: { backgroundColor: '#007AFF' },
   delBtn: { backgroundColor: '#FF3B30' },
   btnText: { color: '#fff', fontWeight: '600', fontSize: 12 },

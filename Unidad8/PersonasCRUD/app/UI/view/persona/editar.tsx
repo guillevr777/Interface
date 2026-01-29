@@ -13,7 +13,7 @@ export default function EditarPersona() {
   // Instancia del ViewModel
   const [vm] = useState(() => new CRUDPersonaVM());
   
-  // Objeto inicial para limpiar el formulario
+  // Objeto inicial
   const personaVacia = new Persona('', '', '', '', '', new Date().toISOString(), 0);
 
   // Estados
@@ -28,7 +28,7 @@ export default function EditarPersona() {
     async function inicializar() {
       setLoading(true);
       
-      // 1. Cargamos siempre los departamentos para el selector
+      // 1. Cargamos los departamentos
       const listaDeptos = await vm.cargarDepartamentos();
       if (isMounted) setDepartamentos(listaDeptos);
 
@@ -40,7 +40,6 @@ export default function EditarPersona() {
           setModoEdicion(true);
         }
       } else {
-        // RESET: Si no hay ID, vaciamos el formulario y quitamos modo edición
         setPersona(personaVacia);
         setModoEdicion(false);
       }
@@ -50,12 +49,12 @@ export default function EditarPersona() {
 
     inicializar();
     return () => { isMounted = false; };
-  }, [params.id]); // Se ejecuta cada vez que cambia el ID en la URL
+  }, [params.id]);
 
   const handleGuardar = async () => {
     // Validación básica
-    if (!persona.Nombre?.trim() || persona.IDDepartamento === 0) {
-      Alert.alert("Validación", "Nombre y Departamento son obligatorios");
+    if (!persona.Nombre?.trim() || !persona.FechaNacimiento || persona.IDDepartamento === 0) {
+      Alert.alert("Validación", "Nombre, Fecha de Nacimiento y Departamento son obligatorios");
       return;
     }
 
@@ -98,6 +97,16 @@ export default function EditarPersona() {
           value={persona.Apellidos} 
           onChangeText={t => setPersona({ ...persona, Apellidos: t })} 
           placeholder="Apellidos"
+        />
+
+        {/* NUEVO CAMPO: FECHA DE NACIMIENTO */}
+        <Text style={s.label}>Fecha de Nacimiento (AAAA-MM-DD)</Text>
+        <TextInput 
+          style={s.input} 
+          value={persona.FechaNacimiento.split('T')[0]} 
+          onChangeText={t => setPersona({ ...persona, FechaNacimiento: t })} 
+          placeholder="Ejemplo: 1990-05-15"
+          keyboardType="numeric"
         />
 
         <Text style={s.label}>Teléfono</Text>
