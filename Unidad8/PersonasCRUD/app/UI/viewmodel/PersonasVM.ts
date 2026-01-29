@@ -45,12 +45,11 @@ export class CRUDPersonaVM implements IViewModel<Persona> {
     try {
       return await this.useCase.eliminarPersona(id);
     } catch (e: any) {
-      this.error = e.message; // Aquí llega el error del domingo
+      this.error = e.message;
       return false;
     }
   }
 
-  // Helper para la vista
   obtenerEdad(fecha: string): number {
     return this.useCase.calcularEdad(fecha);
   }

@@ -33,9 +33,11 @@ src/
 			id : number
 			nombre : String
 			apellidos : String
+			direccion : String	
+			fechaNacimiento : Date
 			idDepartamento : number
 			Persona()
-			Persona(id, nombre, apellidos, idDepartamento)
+			Persona(id, nombre, apellidos, idDepartamento, fechaNacimiento, direccion)
 
 			Departamento.ts
 			class Departamento
@@ -115,17 +117,30 @@ src/
 		UI/
 			viewmodel/
 				
-				CRUDVM.ts
-				class CRUDVM
-				# Inyeccion de CRUDDepartamentosUseCase, CRUDPersonasUseCase				
-				
+				PersonaCRUDVM.ts
+				class PersonaCRUDVM
+				# Inyeccion de CRUDPersonasUseCase	
+				# Metodos async del viewmodel llamaran a los metodos del usecase correspondiente
+
+				DepartamentoCRUDVM.ts
+				class DepartamentoCRUDVM
+				# Inyeccion de CRUDDepartamentosUseCase				
+				# Metodos async del viewmodel llamaran a los metodos del usecase correspondiente
+
 			view/
 				vistaPrincipal.tsx
 				# Vista con seleccion entre Personas o Departamentos
 
-				vistaListado.tsx
-				# Listado donde se seleccionara una Persona o Departamento entre todos los de la lista y se eligira entre eliminarlo, 
+				vistaListadoPersona.tsx
+				# Listado donde se seleccionara una Persona entre todos los de la lista y se eligira entre eliminarlo, 
 				modificarlo o crear uno nuevo. Al eliminarlo no habra mas que un boton pero para modificar y crear se redirecciona a otra vista
 
-				vistaEdicionInsercion.tsx
+				vistaEdicionInsercionPersona.tsx
+				# Mostrara los datos para que modifiques el que quieras, o los campos para rellenar
+
+				vistaListadoDepartamento.tsx
+				# Listado donde se seleccionara un Departamento entre todos los de la lista y se eligira entre eliminarlo, 
+				modificarlo o crear uno nuevo. Al eliminarlo no habra mas que un boton pero para modificar y crear se redirecciona a otra vista
+
+				vistaEdicionInsercionDepartamento.tsx
 				# Mostrara los datos para que modifiques el que quieras, o los campos para rellenar

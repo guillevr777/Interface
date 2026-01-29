@@ -13,7 +13,6 @@ export class PersonasRepository implements IPersonaRepository {
     try {
       const response = await fetch(`${this.baseURL}/Persona`);
       const data = await response.json();
-      // Mapeamos de minúsculas (servidor) a Mayúsculas (tu App)
       return data.map((p: any) => new Persona(
         p.nombre, p.apellidos, p.telefono, p.direccion,
         p.fotoURL, p.fechaNacimiento, p.idDepartamento, p.id,
@@ -44,7 +43,6 @@ export class PersonasRepository implements IPersonaRepository {
     } catch { return false; }
   }
 
-  // --- MÉTODO ACTUALIZAR (YA FUNCIONA) ---
   async actualizar(persona: Persona): Promise<boolean> {
     try {
       if (!persona.ID) return false;
@@ -72,10 +70,8 @@ export class PersonasRepository implements IPersonaRepository {
     }
   }
 
-  // --- MÉTODO INSERTAR (CORREGIDO PARA EVITAR EL ERROR) ---
   async insertar(persona: Persona): Promise<boolean> {
     try {
-      // IMPORTANTE: Eliminamos el campo 'id' para que la API no de error 400/404
       const dto = {
         nombre: persona.Nombre,
         apellidos: persona.Apellidos,

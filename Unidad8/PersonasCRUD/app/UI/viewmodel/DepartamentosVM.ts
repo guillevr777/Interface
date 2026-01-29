@@ -51,16 +51,13 @@ export class CRUDDepartamentoVM implements IViewModel<Departamento> {
     try {
       if (id <= 0) throw new Error('ID inválido');
       
-      // Verificación de integridad referencial manual
       const tienePersonas = await this.verificarPersonasAsociadas(id);
       if (tienePersonas) {
-        // Lanzamos el error específico que la vista capturará
         throw new Error('El departamento tiene personas asociadas');
       }
       
       return await this.useCase.eliminarDepartamento(id);
     } catch (error) {
-      // Re-lanzamos el error para que la UI lo maneje
       throw error;
     }
   }

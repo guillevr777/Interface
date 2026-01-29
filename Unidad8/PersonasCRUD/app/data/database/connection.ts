@@ -18,5 +18,4 @@ export class Connection {
   }
 }
 
-// Export default también por si acaso
 export default Connection;

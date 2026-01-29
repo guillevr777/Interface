@@ -1,4 +1,3 @@
-// UI/componentes/BarraDeBusqueda.tsx
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 

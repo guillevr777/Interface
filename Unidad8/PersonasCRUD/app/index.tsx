@@ -11,7 +11,6 @@ export default function VistaPrincipal() {
       
       <TouchableOpacity 
         style={styles.mainButton}
-        // Cambiado: Ruta absoluta y corregido "personas" por "persona" (singular)
         onPress={() => router.push('/UI/view/persona')} 
       >
         <Text style={styles.mainButtonText}>👤 Gestionar Personas</Text>
@@ -19,7 +18,6 @@ export default function VistaPrincipal() {
 
       <TouchableOpacity 
         style={[styles.mainButton, { backgroundColor: '#FF9500' }]}
-        // Cambiado: Ruta absoluta y corregido "departamentos" por "departamento"
         onPress={() => router.push('/UI/view/departamento')}
       >
         <Text style={styles.mainButtonText}>🏢 Gestionar Departamentos</Text>

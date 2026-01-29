@@ -10,9 +10,6 @@ export class DepartamentoRepository implements IDepartamentoRepository {
     this.baseURL = Connection.getConnection().getBaseURL(); // .../api
   }
 
-  // ======================
-  // GET /api/Departamentos
-  // ======================
   async listar(): Promise<Departamento[]> {
     try {
       const response = await fetch(`${this.baseURL}/Departamentos`, {
@@ -35,9 +32,6 @@ export class DepartamentoRepository implements IDepartamentoRepository {
     }
   }
 
-  // ======================
-  // GET /api/Departamentos/{id}
-  // ======================
   async editar(id: number): Promise<Departamento | null> {
     try {
       const response = await fetch(`${this.baseURL}/Departamentos/${id}`, {
@@ -59,9 +53,6 @@ export class DepartamentoRepository implements IDepartamentoRepository {
     }
   }
 
-  // ======================
-  // POST /api/Departamentos
-  // ======================
   async insertar(departamento: Departamento): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}/Departamentos`, {
@@ -82,9 +73,6 @@ export class DepartamentoRepository implements IDepartamentoRepository {
     }
   }
 
-  // ======================
-  // PUT /api/Departamentos/{id}
-  // ======================
   async actualizar(departamento: Departamento): Promise<boolean> {
     try {
       const response = await fetch(
@@ -109,9 +97,6 @@ export class DepartamentoRepository implements IDepartamentoRepository {
     }
   }
 
-  // ======================
-  // DELETE /api/Departamentos/{id}
-  // ======================
   async eliminar(id: number): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}/Departamentos/${id}`, {

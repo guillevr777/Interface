@@ -1,11 +1,3 @@
-/**
- * Types - Definiciones de tipos globales
- */
-
-// ============================================
-// DOMAIN TYPES
-// ============================================
-
 export interface IPersona {
   id: number;
   nombre: string;
@@ -19,9 +11,6 @@ export interface IDepartamento {
   nombre: string;
 }
 
-// ============================================
-// REPOSITORY TYPES
-// ============================================
 
 export interface IRepository<T> {
   listar(): Promise<T[]>;
@@ -31,9 +20,6 @@ export interface IRepository<T> {
   eliminar(id: number): Promise<boolean>;
 }
 
-// ============================================
-// USE CASE TYPES
-// ============================================
 
 export interface ICRUDUseCase<T> {
   listar(): Promise<T[]>;
@@ -43,9 +29,6 @@ export interface ICRUDUseCase<T> {
   eliminar(id: number): Promise<boolean>;
 }
 
-// ============================================
-// API RESPONSE TYPES
-// ============================================
 
 export interface ApiResponse<T> {
   data: T;
@@ -67,9 +50,6 @@ export interface DepartamentoDTO {
   nombre: string;
 }
 
-// ============================================
-// VIEW MODEL TYPES
-// ============================================
 
 export interface IViewModel<T> {
   listar(): Promise<T[]>;
@@ -79,9 +59,6 @@ export interface IViewModel<T> {
   eliminar(id: number): Promise<boolean>;
 }
 
-// ============================================
-// ESTADO DE LA APLICACIÓN
-// ============================================
 
 export enum EstadoCarga {
   IDLE = 'IDLE',
@@ -96,10 +73,6 @@ export interface EstadoUI {
   mensaje: string | null;
 }
 
-// ============================================
-// TIPOS DE OPERACIONES CRUD
-// ============================================
-
 export enum OperacionCRUD {
   CREAR = 'CREAR',
   LEER = 'LEER',
@@ -108,9 +81,6 @@ export enum OperacionCRUD {
   LISTAR = 'LISTAR'
 }
 
-// ============================================
-// CONFIGURACIÓN
-// ============================================
 
 export interface ApiConfig {
   baseURL: string;
@@ -124,9 +94,6 @@ export interface AppConfig {
   environment: 'development' | 'production' | 'test';
 }
 
-// ============================================
-// TIPOS DE ERRORES
-// ============================================
 
 export class AppError extends Error {
   constructor(
@@ -160,9 +127,6 @@ export class NotFoundError extends AppError {
   }
 }
 
-// ============================================
-// UTILIDADES DE TIPO
-// ============================================
 
 export type Nullable<T> = T | null;
 
@@ -172,9 +136,6 @@ export type AsyncResult<T> = Promise<T>;
 
 export type ID = number | string;
 
-// ============================================
-// TIPOS PARA FORMULARIOS
-// ============================================
 
 export interface FormField<T = string> {
   value: T;
@@ -193,10 +154,6 @@ export interface PersonaForm {
 export interface DepartamentoForm {
   nombre: FormField;
 }
-
-// ============================================
-// TIPOS PARA NAVEGACIÓN
-// ============================================
 
 export type NavigationRoute = 
   | 'principal'

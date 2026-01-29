@@ -9,10 +9,8 @@ export default function EditarDepartamento() {
   const params = useLocalSearchParams();
   const [vm] = useState(() => new CRUDDepartamentoVM());
   
-  // Clave para forzar el reinicio del componente entre crear/editar
   const idKey = params.id ? String(params.id) : 'nuevo';
 
-  // CORRECCIÓN: constructor(id, nombre) -> new Departamento(0, '')
   const [departamento, setDepartamento] = useState<Departamento>(new Departamento(0, ''));
   const [modoEdicion, setModoEdicion] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,7 +27,6 @@ export default function EditarDepartamento() {
           setModoEdicion(true);
         }
       } else {
-        // RESET: Valores iniciales correctos
         setDepartamento(new Departamento(0, ''));
         setModoEdicion(false);
       }
@@ -51,7 +48,6 @@ export default function EditarDepartamento() {
       : await vm.crear(departamento);
 
     if (success) {
-      // REDIRECCIÓN AL INDEX DE DEPARTAMENTOS
       router.replace('/UI/view/departamento');
     } else {
       Alert.alert("Error", "No se pudo guardar el departamento");

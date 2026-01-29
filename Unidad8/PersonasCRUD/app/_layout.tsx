@@ -1,4 +1,3 @@
-// app/_layout.tsx
 import { Drawer } from 'expo-router/drawer';
 
 export default function Layout() {
@@ -16,7 +15,6 @@ export default function Layout() {
         options={{ title: 'Departamentos' }} 
       />
 
-      {/* --- ESTO OCULTA LO QUE NO QUIERES QUE SALGA --- */}
       <Drawer.Screen 
         name="container/core" 
         options={{ drawerItemStyle: { display: 'none' } }} 
@@ -26,7 +24,6 @@ export default function Layout() {
         options={{ drawerItemStyle: { display: 'none' } }} 
       />
 
-      {/* Ocultar también las pantallas de editar para que no ensucien el menú */}
       <Drawer.Screen 
         name="UI/view/persona/editar" 
         options={{ drawerItemStyle: { display: 'none' } }} 
